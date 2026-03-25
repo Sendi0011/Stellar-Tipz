@@ -11,27 +11,6 @@ import LandingPage from './features/landing/LandingPage';
 // import DashboardPage from './features/dashboard/DashboardPage';
 // import LeaderboardPage from './features/leaderboard/LeaderboardPage';
 
-const App: React.FC = () => {
-  return (
-    <BrowserRouter>
-      <div className="min-h-screen flex flex-col bg-white">
-        <Header />
-        <div className="flex-1">
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            {/* Routes to be enabled as features are built:
-            <Route path="/@:username" element={<TipPage />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/leaderboard" element={<LeaderboardPage />} />
-            */}
-          </Routes>
-        </div>
-        <div>
-          hellooooo
-        </div>
-        <Footer />
-      </div>
     </BrowserRouter>
   );
 };
