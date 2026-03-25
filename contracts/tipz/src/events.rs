@@ -17,8 +17,10 @@ use soroban_sdk::{symbol_short, Address, Env, String};
 /// Topics : `("ProfReg",)`
 /// Data   : `(owner: Address, username: String)`
 pub fn emit_profile_registered(env: &Env, owner: &Address, username: &String) {
-    env.events()
-        .publish((symbol_short!("ProfReg"),), (owner.clone(), username.clone()));
+    env.events().publish(
+        (symbol_short!("ProfReg"),),
+        (owner.clone(), username.clone()),
+    );
 }
 
 /// Emitted by `update_profile` when a creator updates their profile.
