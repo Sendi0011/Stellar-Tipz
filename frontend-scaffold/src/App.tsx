@@ -26,8 +26,8 @@ const App: React.FC = () => {
             <Route path="/leaderboard" element={<LeaderboardPage />} />
           </Routes>
         </div>
-        <Footer />
-      </div>
+      </ErrorBoundary>
+      <ToastContainer />
     </BrowserRouter>
   );
 };
