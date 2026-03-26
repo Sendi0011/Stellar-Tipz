@@ -1,51 +1,115 @@
-import React from 'react';
-import { LayoutDashboard, TrendingUp, Users, Wallet } from 'lucide-react';
+import React from "react";
+import { ArrowUpRight, Coins, LayoutDashboard, Wallet } from "lucide-react";
+import { Link } from "react-router-dom";
+
+import PageContainer from "../../components/layout/PageContainer";
+import AmountDisplay from "../../components/shared/AmountDisplay";
+import CreditBadge from "../../components/shared/CreditBadge";
+import TipCard from "../../components/shared/TipCard";
+import WalletConnect from "../../components/shared/WalletConnect";
+import Card from "../../components/ui/Card";
+import EmptyState from "../../components/ui/EmptyState";
+import Pagination from "../../components/ui/Pagination";
+import { mockProfile, mockTips } from "../mockData";
 
 const DashboardPage: React.FC = () => {
+  const totalPages = Math.max(1, Math.ceil(mockTips.length / 3));
+
   return (
-    <div className="container mx-auto px-4 py-12 max-w-6xl">
-      <div className="mb-10">
-        <h1 className="text-4xl font-black text-gray-900 tracking-tight mb-2 flex items-center gap-3">
-          <LayoutDashboard className="h-10 w-10 text-blue-600" />
-          Creator Dashboard
-        </h1>
-        <p className="text-gray-500 text-lg">Manage your profile, track your earnings, and engage with your supporters.</p>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-        <StatCard label="Total Tips" value="1,250 XLM" icon={<TrendingUp className="text-green-500" />} />
-        <StatCard label="Supporters" value="48" icon={<Users className="text-blue-500" />} />
-        <StatCard label="Pending" value="120 XLM" icon={<Wallet className="text-orange-500" />} />
-        <StatCard label="Level" value="Gold" icon={<div className="h-5 w-5 rounded-full bg-yellow-400" />} />
-      </div>
-
-      <div className="bg-white border border-gray-200 rounded-2xl p-8 text-center">
-        <div className="max-w-md mx-auto">
-          <div className="h-20 w-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
-            <LayoutDashboard className="h-10 w-10 text-blue-600" />
-          </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Implementation in Progress</h2>
-          <p className="text-gray-500 mb-8 leading-relaxed">
-            The dashboard analytics and management tools are currently being built. Check back soon for real-time insights!
+    <PageContainer maxWidth="xl" className="space-y-8 py-10">
+      <section className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.25em] text-gray-500">
+            Creator dashboard
           </p>
-          <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
-            <div className="h-full bg-blue-600 w-3/4 rounded-full" />
-          </div>
-          <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest mt-4">75% Complete</p>
+          <h1 className="mt-2 flex items-center gap-3 text-4xl font-black uppercase">
+            <LayoutDashboard size={32} />
+            Earnings snapshot
+          </h1>
         </div>
-      </div>
-    </div>
+        <WalletConnect />
+      </section>
+
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <Card className="space-y-2">
+          <p className="text-xs font-black uppercase tracking-[0.2em] text-gray-500">Available balance</p>
+          <AmountDisplay amount={mockProfile.balance} className="text-2xl" />
+        </Card>
+        <Card className="space-y-2 bg-yellow-100">
+          <p className="text-xs font-black uppercase tracking-[0.2em] text-gray-500">Lifetime volume</p>
+          <AmountDisplay amount={mockProfile.totalTipsReceived} className="text-2xl" />
+        </Card>
+        <Card className="space-y-2">
+          <p className="text-xs font-black uppercase tracking-[0.2em] text-gray-500">Supporters</p>
+          <p className="text-3xl font-black">{mockProfile.totalTipsCount}</p>
+        </Card>
+        <Card className="space-y-2">
+          <p className="text-xs font-black uppercase tracking-[0.2em] text-gray-500">Credit score</p>
+          <CreditBadge score={mockProfile.creditScore} />
+        </Card>
+      </section>
+
+      <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+        <Card className="space-y-4" padding="lg">
+          <div className="flex items-center justify-between gap-4">
+            <h2 className="text-2xl font-black uppercase">Recent earnings</h2>
+            <Link to="/profile" className="text-sm font-black uppercase underline">
+              View full profile
+            </Link>
+          </div>
+
+          {mockTips.length === 0 ? (
+            <EmptyState
+              icon={<Coins />}
+              title="No earnings yet"
+              description="Once tips start landing, your payout history will show up here."
+            />
+          ) : (
+            <div className="space-y-4">
+              {mockTips.slice(0, 3).map((tip) => (
+                <TipCard key={`${tip.from}-${tip.timestamp}`} tip={tip} showReceiver={false} />
+              ))}
+            </div>
+          )}
+
+          <Pagination currentPage={1} totalPages={totalPages} onPageChange={() => {}} />
+        </Card>
+
+        <div className="space-y-6">
+          <Card className="space-y-4" padding="lg">
+            <h2 className="text-xl font-black uppercase">Withdrawal status</h2>
+            <div className="border-2 border-black bg-white p-4">
+              <p className="text-xs font-black uppercase tracking-[0.2em] text-gray-500">Ready to withdraw</p>
+              <AmountDisplay amount={mockProfile.balance} className="mt-2 block text-xl" />
+            </div>
+            <p className="text-sm font-medium leading-6 text-gray-700">
+              Withdrawal execution is still placeholder-backed in the scaffold, but the dashboard now makes the flow visible.
+            </p>
+          </Card>
+
+          <Card className="space-y-4" padding="lg">
+            <h2 className="text-xl font-black uppercase">Growth signals</h2>
+            <div className="grid gap-3">
+              <div className="flex items-center justify-between border-2 border-black p-3">
+                <span className="inline-flex items-center gap-2 text-sm font-bold">
+                  <Wallet size={16} />
+                  Returning supporters
+                </span>
+                <span className="text-lg font-black">38%</span>
+              </div>
+              <div className="flex items-center justify-between border-2 border-black p-3">
+                <span className="inline-flex items-center gap-2 text-sm font-bold">
+                  <ArrowUpRight size={16} />
+                  Weekly tip volume
+                </span>
+                <span className="text-lg font-black">+14%</span>
+              </div>
+            </div>
+          </Card>
+        </div>
+      </section>
+    </PageContainer>
   );
 };
-
-const StatCard: React.FC<{ label: string; value: string; icon: React.ReactNode }> = ({ label, value, icon }) => (
-  <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
-    <div className="flex items-center justify-between mb-4">
-      <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">{label}</span>
-      <div className="h-8 w-8 bg-gray-50 rounded-lg flex items-center justify-center">{icon}</div>
-    </div>
-    <div className="text-2xl font-black text-gray-900">{value}</div>
-  </div>
-);
 
 export default DashboardPage;
