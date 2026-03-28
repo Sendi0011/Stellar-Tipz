@@ -12,6 +12,7 @@ import EmptyState from "../../components/ui/EmptyState";
 import Pagination from "../../components/ui/Pagination";
 import { mockProfile, mockTips } from "../mockData";
 import EarningsChart from "./EarningsChart";
+import QRCode from "./QRCode";
 
 const DashboardPage: React.FC = () => {
   const totalPages = Math.max(1, Math.ceil(mockTips.length / 3));
@@ -112,6 +113,9 @@ const DashboardPage: React.FC = () => {
                 <span className="text-lg font-black">+14%</span>
               </div>
             </div>
+          </Card>
+          <Card padding="lg">
+            <QRCode url={`https://tipz.app/@${mockProfile.username}`} />
           </Card>
         </div>
       </section>
