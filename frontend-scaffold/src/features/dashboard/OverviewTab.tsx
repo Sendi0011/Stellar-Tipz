@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   TrendingUp,
   Coins,
@@ -132,7 +132,7 @@ const OverviewTab: React.FC = () => {
       <section className="border-2 border-black bg-white p-6">
         <h2 className="mb-4 text-lg font-black uppercase">Tips — Last 7 Days</h2>
         <div className="flex h-32 items-end gap-2">
-          {weeklyData.map((day) => {
+          {weeklyData.map((day: { label: string; total: number }) => {
             const heightPct = Math.round((day.total / maxBar) * 100);
             return (
               <div key={day.label} className="flex flex-1 flex-col items-center gap-1">
