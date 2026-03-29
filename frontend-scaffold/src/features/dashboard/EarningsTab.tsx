@@ -5,13 +5,13 @@ import AmountDisplay from "../../components/shared/AmountDisplay";
 import Button from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
 import EmptyState from "../../components/ui/EmptyState";
+import { useDashboard } from "../../hooks/useDashboard";
 import { formatTimestamp } from "../../helpers/format";
-import type { ContractStats, Profile } from "../../types";
-import { mockTips } from "../mockData";
 import BalanceCard from "./BalanceCard";
 import EarningsChart from "./EarningsChart";
 import WithdrawModal from "./WithdrawModal";
 import Loader from "../../components/ui/Loader";
+import { Tip } from "../../types/contract";
 
 interface WithdrawalHistoryItem {
   id: string;
@@ -21,17 +21,16 @@ interface WithdrawalHistoryItem {
   net: string;
 }
 
-const EarningsTab: React.FC<EarningsTabProps> = ({
-  profile,
-  stats,
-  loading = false,
-}) => {
+const DEFAULT_FEE_BPS = 200;
+
+const EarningsTab: React.FC = () => {
+  const { profile, tips, stats, loading } = useDashboard();
   const [withdrawOpen, setWithdrawOpen] = useState(false);
-  const feeBps = stats?.feeBps ?? 200;
+  const feeBps = stats?.feeBps ?? DEFAULT_FEE_BPS;
 
   // Manual calculation for withdrawal history based on tips (placeholder logic since contract doesn't return withdrawals yet)
   const withdrawals = useMemo<WithdrawalHistoryItem[]>(() => {
-    return tips.slice(0, 4).map((tip, index) => {
+    return tips.slice(0, 4).map((tip: Tip, index: number) => {
       const gross = BigInt(tip.amount) * BigInt(index + 2);
       const fee = (gross * BigInt(feeBps)) / BigInt(10_000);
       const net = gross - fee;

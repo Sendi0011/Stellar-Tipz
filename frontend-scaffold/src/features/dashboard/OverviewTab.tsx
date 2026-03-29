@@ -25,9 +25,9 @@ function buildWeeklyChart(tips: Tip[]) {
     };
   });
 
-  const now = Date.now();
-  tips.forEach((tip) => {
-    const daysAgo = Math.floor((now - tip.timestamp * 1000) / (1000 * 60 * 60 * 24));
+  const now = Math.floor(Date.now() / 1000);
+  tips.forEach((tip: Tip) => {
+    const daysAgo = Math.floor((now - tip.timestamp) / (60 * 60 * 24));
     const idx = 6 - daysAgo;
     if (idx >= 0 && idx < 7) {
       days[idx].total += Number(tip.amount);
@@ -38,9 +38,9 @@ function buildWeeklyChart(tips: Tip[]) {
 }
 
 // Weekly tips count (tips received in the past 7 days)
-function countThisWeek(tips: typeof mockTips) {
+function countThisWeek(tips: Tip[]) {
   const cutoff = Math.floor(Date.now() / 1000) - 7 * 24 * 60 * 60;
-  return tips.filter((t) => t.timestamp >= cutoff).length;
+  return tips.filter((t: Tip) => t.timestamp >= cutoff).length;
 }
 
 // Stroop → display XLM string
@@ -182,8 +182,8 @@ const OverviewTab: React.FC = () => {
 
       <WithdrawModal
         isOpen={withdrawOpen}
-        balance={mockProfile.balance}
-        feeBps={200}
+        balance={profile.balance}
+        feeBps={stats?.feeBps || 200}
         onClose={() => setWithdrawOpen(false)}
       />
     </div>
