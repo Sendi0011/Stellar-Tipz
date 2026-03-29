@@ -1,13 +1,17 @@
 import React from 'react';
 import { ArrowUpRight, Coins, LayoutDashboard, Wallet, QrCode, Settings } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 
 import PageContainer from "../../components/layout/PageContainer";
 import WalletConnect from "../../components/shared/WalletConnect";
+import AmountDisplay from "../../components/shared/AmountDisplay";
+import CreditBadge from "../../components/shared/CreditBadge";
+import TipCard from "../../components/shared/TipCard";
+import Button from "../../components/ui/Button";
 import Card from "../../components/ui/Card";
 import EmptyState from "../../components/ui/EmptyState";
 import Pagination from "../../components/ui/Pagination";
-import Button from "../../components/ui/Button";
+import Tabs from "../../components/ui/Tabs";
 import { mockProfile, mockTips } from "../mockData";
 import EarningsChart from "./EarningsChart";
 import QRCode from "./QRCode";
@@ -174,7 +178,7 @@ const DashboardPage: React.FC = () => {
             </p>
           ) : null}
           <p className="mt-2 text-sm font-bold text-gray-600">
-            Welcome back, <span className="text-black">{creator.displayName || `@${creator.username}`}</span>
+            Welcome back, <span className="text-black">{profile?.displayName || `@${creator.username}`}</span>
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -184,9 +188,9 @@ const DashboardPage: React.FC = () => {
           <WalletConnect />
           <p>
             @{creator.username}
-          </p>
+          </div>
+          <WalletConnect />
         </div>
-        <WalletConnect />
       </section>
 
       {/* Stats Overview */}

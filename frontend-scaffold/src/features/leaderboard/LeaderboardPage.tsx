@@ -108,6 +108,7 @@ const LeaderboardPage: React.FC = () => {
             </div>
           )}
         </div>
+        <Podium creators={mockLeaderboard.slice(0, 3)} />
       </section>
 
 
